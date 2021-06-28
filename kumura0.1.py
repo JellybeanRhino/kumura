@@ -1,64 +1,82 @@
 # kumura_store.py
 # Rhiannon MacCreadie
 # 22.06.2021
+# 28.06.2021
 # This program will add, sell, and restock items at Hemis' kumura farm
-
-def test():
-    """
-    test for something i need later
-    """
-    i = 50 - (50 * 2)
-    print(i)
 
 def add(catalog):
     """
 Adds items to catalog with price and stock
 returns updated catalog
 """
-   
-  
-    # Asks user for item
-    new_item = input("Enter a New Item: ").title()
-    # Checks if item in catalog
-    item = find_item(catalog, new_item)
-    # Ensure only new items are added to catalog
+    # Asks user for a new item
+    new_item = input("Enter a New Item: ")
+    # Checks item against catalog
+    item = find_item(new_item)
+    # If item already in catalog re direct to menu
     if item == new_item:
-        # If already cataloged tell the user and go back to menu
-        print("This item already in catalog")
+        print("This is not a new item")
     else:
-        # If New Item ask for price
-        price = input("Enter price of {}: ".format(new_item))
-        # ask for stock (how much)
-        stock = int(input("Enter stock amount: "))
-        # check if stock under 50
-        checked_stock = check_stock(stock)
-        # update catalog
-        catalog.append({"Item" : new_item , "Price" : price, "Stock" : checked_stock })
+        # Asks for price
+        price = float(input("Enter Price: "))
+        # Asks for amount to stock
+        new_stock = int(input("Enter amount of Stock: "))
+        # Checks amount is under Max stock number
+        stock = check_stock(new_stock)
+        # Adds dictionary of item to catalog
+        catalog.append({"Item":new_item, "Price":price, "Stock":stock})
 
-    # return updated catalog
+    # Return an updated catalog
     return catalog
-            
-            
     
-        
 
 
-def check_stock(stock):
+def check_stock(new_stock):
     """
-Lets user input how much of an item they are adding or minusing
-Final stock count must not exceed 50
+Ensures final stock count must not exceed 50
 """
-    MAX = 50
-    while stock > MAX:
-        print("stock no more then 50 of an item")
-        stock = int(input("Enter stock amount: "))
+    MAX_STOCK = 50
+    while new_stock > MAX_STOCK:
+        print("You cannot have a stock over {}".format(MAX_STOCK))
+        new_stock = int(input("Enter New Stock: "))
 
-    return stock
+    # Returns Corrected amount
+    return new_stock
         
-        
-        
+
     
+def restock():
+    """
+Allows user to restock an item
+"""
+    # User inputs an item to restock
+    restock_item = input("Enter Item to restock: ")
+    # Finds item in catalog
+    item = find_item(restock_item)
+    if item == restock_item:
+        # Uses item to find previous stock
+        stock = find_stock(item)
+        # Prints current stock
+        print(stock)
+        # Asks user for restock value
+        new_stock = input("Enter new stock amount: ")
+        stock = check_stock(new_stock)
+        # Updates catalog
+        catalog.update
+    else:
+        print("This item is not in catalog")
+    # Returns updated Catalog
 
+def sell_stock():
+    """
+takes away from an items stock if selling
+minus_stock = amount - (amount * 2)
+"""
+
+def find_stock():
+    """
+finds the stock of a specified item
+"""
 
 def find_price():
     """
@@ -75,24 +93,22 @@ prints gst price
 """
 
 
-def restock():
+
+def find_item(item):
     """
-Allow user to restock a previously added item
+Finds a specified item key and returns it
 """
-
-
-def find_item(catalog, new_item):
-    """
-finds a specified item
-"""
-    if not len(catalog):
-        return None
-    else:
-        for items in catalog:
-            if items["Item"] == new_item:
-                print(items)
-                return items["Item"]
-
+    # Roll through each dictionary
+    # Compares each cataloged title to the title asked for
+    for items in catalog:
+        # Returns item if already in catalog
+        if item == items["title"]:
+            return item
+        else:
+            # Returns Nothing if not in catalog
+            item = None
+            return item
+            
 
 
 def gst():
@@ -111,9 +127,11 @@ def menu(catalog):
     """
 Redirects the user to chosen function
 """
+
     print(" Welcome to Hemi's Kumura store ")
+    # Make a loop
     while True:
-        print(""" (a)dd
+        print("""(a)dd
     (s)ell
     (r)estock
     (p)rint
@@ -129,7 +147,7 @@ Redirects the user to chosen function
         elif choice == "p":
             print_stock()
         elif choice == "q":
-            break
+            quit
         # Error catch if user doesnt input a letter correlation
         else:
             print("This is not a valid input :(")
